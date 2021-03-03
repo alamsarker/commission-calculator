@@ -58,12 +58,13 @@ $results = $manager
 
 ## Important Notes
 
-* For the sake of simplicity, its been used `App\Libraries\Commission\Config` class for saving the commission and curency settings. In real life, its may be moved to yml or database.
+* For the sake of simplicity, its been used `App\Libraries\Commission\Config` class for saving the commission and currency settings. In real life, its may be moved to yml or database.
 * It has not been used the latest api rates by calling the api. Instead, used the static currency rates in config class.
-* My solution has been tested with the provided CSV file only. Output has not matched of input `2016-02-19,5,private,withdraw,3000000,JPY`. Expected output is `8612` but `8611.42` is given by this solution.
+* This solution has been tested with the provided CSV file only. A single output of the input `2016-02-19,5,private,withdraw,3000000,JPY` has not matched. Expected output is `8612` but `8611.42` is produced by this solution.
+* Exceptions has not handled.
 
 
-## Explanation of the confusing or complex code
+## Explanation of the confusing/complex code
 
 The following few code block is confusing to understand. Lets discuss that part:-
 
@@ -87,7 +88,7 @@ The below block of code has been taken from `App\Libraries\Commission\Rules\Priv
 15.    }                   
 16. }
 ```
-* line 1: The withdrwal commission of private client will be the default rate `0.3%`.
+* line 1: The withdrawal commission of private client will be the default rate `0.3%`.
 * line 2: Checking weekly free operation times that configured in setting.
 * line 4-11: Calculate the max commission and the operation amount.
 * line 12,13: Commission rating will be `0`if operation amount is within allowable free max amount that is `1000 EUR`

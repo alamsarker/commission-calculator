@@ -1,0 +1,18 @@
+version: '2'
+networks:
+  basic:
+    driver:
+      bridge
+
+services:  
+  fpm:
+    container_name: commission-task-fpm
+    networks:
+      - basic
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "9000:9000"
+    build:
+      context: .
+      dockerfile: Dockerfile-fpm    

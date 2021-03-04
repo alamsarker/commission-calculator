@@ -18,6 +18,29 @@ use App\Libraries\{
 final class PrivateWithdrawRuleTest extends TestCase
 {
     /**
+     * @var PrivateWithdrawRule
+     */
+    private $privateWithdrawRule;
+
+    /**
+     * Setup PrivateWithdrawRule
+     */
+    public function setUp(): void
+    {
+        $config = new Config();
+        $converter = new CurrencyConverter($config->getCurrency());
+        $cache = new ArrayCache();
+        $formatter = new RoundedUpFormatter();
+
+        $this->privateWithdrawRule = new PrivateWithdrawRule(
+            $converter,
+            $config,
+            $cache,
+            $formatter
+        );
+    }
+    
+    /**
      * Calculate commission with free of charge
      */
     public function testGetCommissionWithFreeCharge()
@@ -29,27 +52,9 @@ final class PrivateWithdrawRuleTest extends TestCase
             'withdraw', 
             1000, 
             'EUR'
-        );   
-        
-        $config = new Config();
-        $config
-            ->setPrivateWithdrawRate(0.3)
-            ->setPrivateWithdrawMaxTimes(3)
-            ->setPrivateWithdrawMaxLimit(1000)
-            ->setCurrency([])
-            ;
-        $converter = new CurrencyConverter($config->getCurrency());
-        $cache = new ArrayCache();
-        $formatter = new RoundedUpFormatter();
+        );            
 
-        $rule = new PrivateWithdrawRule(
-            $converter,
-            $config,
-            $cache,
-            $formatter
-        );       
-
-        $commission = $rule->getCommission($operation);
+        $commission = $this->privateWithdrawRule->getCommission($operation);
         $this->assertEquals(0, $commission);         
     } 
     
@@ -65,27 +70,9 @@ final class PrivateWithdrawRuleTest extends TestCase
             'withdraw', 
             1200, 
             'EUR'
-        );
-        
-        $config = new Config();
-        $config
-            ->setPrivateWithdrawRate(0.3)
-            ->setPrivateWithdrawMaxTimes(3)
-            ->setPrivateWithdrawMaxLimit(1000)
-            ->setCurrency([])
-            ;
-        $converter = new CurrencyConverter($config->getCurrency());
-        $cache = new ArrayCache();
-        $formatter = new RoundedUpFormatter();
+        );           
 
-        $rule = new PrivateWithdrawRule(
-            $converter,
-            $config,
-            $cache,
-            $formatter
-        );       
-
-        $commission = $rule->getCommission($operation);
+        $commission = $this->privateWithdrawRule->getCommission($operation);
         $this->assertEquals(0.60, $commission);         
     } 
 }
